@@ -43,7 +43,6 @@ function Navbar() {
                         </div>
                     </div>
 
-                    {/* Modern Desktop Navigation */}
                     <div className="hidden md:block">
                         <div className="flex items-center space-x-3">
                             <a href="/" className="relative group px-4 py-2 text-gray-700 font-medium transition-all duration-300 hover:text-transparent hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:bg-clip-text">
@@ -76,10 +75,10 @@ function Navbar() {
                                     <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300 "></div>
                                     <span className="relative z-10">Official login</span>
                                 </Link>
-                                <button className="relative overflow-hidden bg-orange-500 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+                                <Link to="/user/login" className="relative overflow-hidden bg-orange-500 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:scale-105 group">
                                     <div className="absolute inset-0  group-hover:opacity-100 transition-opacity duration-300"></div>
                                     <span className="relative z-10">User Login</span>
-                                </button>
+                                </Link>
                                 </div>
                                 }
                             </div>
