@@ -67,6 +67,7 @@ export default function LandingPage({ name  }) {
     { number: "24/7", label: "ऑनलाइन सहायता", englishLabel: "Online Support" },
     
   ];
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
@@ -150,7 +151,7 @@ export default function LandingPage({ name  }) {
        
                 <div className="p-6 pb-4">
                   <div className="flex items-start space-x-4 mb-4">
-                    <div className={`relative p-4 rounded-xl bg-green-500  shadow-lg transform  transition-transform duration-500`}>
+                    <div className={`relative p-4 rounded-xl bg-green  shadow-lg transform  transition-transform duration-500`}>
                       <AlertTriangle className="w-6 h-6 text-white"   />
                     </div>
                     <div className="flex-1">
@@ -170,7 +171,7 @@ export default function LandingPage({ name  }) {
                   <div className="space-y-2">
                     {service.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center space-x-2 text-sm text-gray-600">
-                        <div className="w-4 h-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-4 h-4 bg-gradient-to-r from-green to-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
                           <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                           </svg>
@@ -188,7 +189,7 @@ export default function LandingPage({ name  }) {
                 
                   <Link
                    to={`/${service.link}`} className=
-                 {`w-full bg-green-500  text-white px-6 py-3 rounded-xl font-semibold
+                 {`w-full bg-green  text-white px-6 py-3 rounded-xl font-semibold
                   transition-all duration-300 hover:shadow-lg transform hover:bg-green-600`}>
                    {service.link}
                   

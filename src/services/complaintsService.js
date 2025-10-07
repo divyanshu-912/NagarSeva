@@ -37,12 +37,7 @@ export const submitComplaint = async (complaintData) => {
       };
     }
 
-    console.log('Using demo mode for complaint submission');
-    const demoComplaint = {
-      ...complaint,
-      id: `demo-complaint-${Date.now()}`,
-    };
-    
+
     return { 
       success: true, 
       id: `CMP-${Date.now()}`,
@@ -288,3 +283,51 @@ export const deleteComplaint = async (complaintId) => {
 };
 
 export const getComplaints = getAllComplaints;
+
+export const getComplaintsByUser = async (profile = {}) => {
+  try {
+    // Try matching by explicit user id if complaints table stores it
+    if (profile && profile.id) {
+      const { data: byUser, error: errUser } = await supabase
+        .from('complaints')
+        .select(`*, departments!inner(id, name, description)`)
+        .eq('created_by', profile.id)
+        .order('created_at', { ascending: false });
+
+      if (byUser && !errUser && byUser.length > 0) {
+        return byUser.map(c => ({ ...c, department_name: c.departments?.name }));
+      }
+    }
+
+    // Fallback: match by phone if profile has phone
+    if (profile && profile.phone) {
+      const { data, error } = await supabase
+        .from('complaints')
+        .select(`*, departments!inner(id, name, description)`)
+        .eq('citizen_phone', profile.phone)
+        .order('created_at', { ascending: false });
+
+      if (data && !error) {
+        return data.map(c => ({ ...c, department_name: c.departments?.name }));
+      }
+    }
+
+    // Final fallback: match by email if profile has email
+    if (profile && profile.email) {
+      const { data, error } = await supabase
+        .from('complaints')
+        .select(`*, departments!inner(id, name, description)`)
+        .eq('citizen_email', profile.email)
+        .order('created_at', { ascending: false });
+
+      if (data && !error) {
+        return data.map(c => ({ ...c, department_name: c.departments?.name }));
+      }
+    }
+
+    return [];
+  } catch (error) {
+    console.error('Error getting complaints by user:', error);
+    return [];
+  }
+};

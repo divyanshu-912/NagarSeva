@@ -79,7 +79,7 @@ export default function ManagerDashboard() {
 
   const handleLogout = () => {
     logoutUser();
-    navigate('/admin/login');
+    navigate('/');
   };
 
   const handleAssignTask = async (complaintId, workerId) => {

@@ -12,7 +12,9 @@ import AdminProtectedRoute from './components/admin/ProtectedRoute';
 import UserLandingPage from './pages/user/LandingPage';
 import UserNavbar from './components/user/Navbar';
 import UserFooter from './components/user/Footer';
-import UserLogin from './components/user/Login';
+import UserLogin from './pages/user/UserLogin'; // ✅ Updated to use new UserLogin page
+import MyProfile from './pages/user/MyProfile';
+import ComplaintForm from './pages/user/ComplaintForm'; // ✅ Complaint form for users
 
 function App() {
   return (
@@ -35,6 +37,12 @@ function App() {
             </>
           } />
           <Route path="/user/login" element={<UserLogin />} />
+          <Route path="/user/my-profile" element={<>
+              <UserNavbar />
+              <MyProfile />
+              <UserFooter />
+            </>} />
+          <Route path="/Complaint" element={<ComplaintForm />} /> {/* ✅ User complaint form */}
           
        
           <Route path="/admin" element={<AdminLogin />} />

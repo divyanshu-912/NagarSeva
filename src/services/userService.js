@@ -56,7 +56,36 @@ export const getCurrentUser = async () => {
         profile: parsed.profile
       };
     }
-    return { user: null, profile: null };
+    // If no user in localStorage, seed a dummy user for development/testing
+    try {
+      if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'production') {
+        return { user: null, profile: null };
+      }
+    } catch (e) {
+      // ignore and proceed to seed in non-production or unknown env
+    }
+
+    const demoProfile = {
+      id: 9999,
+      username: 'demo.user',
+      name: 'Demo User',
+      email: 'demo.user@example.com',
+      phone: '9999999999',
+      department_id: 1,
+      department_name: 'Waste Management',
+      role: 'user',
+      created_at: new Date().toISOString()
+    };
+
+  
+    const loginData = { user: demoUser, profile: demoProfile };
+    try {
+      localStorage.setItem('user', JSON.stringify(loginData));
+    } catch (e) {
+      // ignore storage errors
+    }
+
+    return { user: demoUser, profile: demoProfile };
  
 };
 
