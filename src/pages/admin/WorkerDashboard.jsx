@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser, logoutUser } from '../../services/userService';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../utils/supabaseClient';
 import { getTasksByWorker, updateTaskStatus } from '../../services/taskService';
 import Caffiene from '../../assets/Caffiene.png';
 
 export default function WorkerDashboard() {
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [profile, setProfile] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,25 @@ export default function WorkerDashboard() {
   const loadWorkerData = async () => {
     try {
       setLoading(true);
-      const { user, profile: userProfile } = await getCurrentUser();
+
+      if (!user) {
+        navigate('/admin/login');
+        return;
+      }
+
+      // Fetch user profile from EmployeeProfile table
+      const { data: userProfile, error: profileError } = await supabase
+        .from('EmployeeProfile')
+        .select('*')
+        .eq('Eid', user.id)
+        .single();
+
+      if (profileError || !userProfile) {
+        console.error('Error fetching profile:', profileError);
+        await signOut();
+        navigate('/admin/login');
+        return;
+      }
       
       setProfile(userProfile);
 
@@ -51,8 +71,13 @@ export default function WorkerDashboard() {
   };
 
   const handleLogout = async () => {
-    logoutUser();
-    navigate('/admin/login');
+    try {
+      await signOut();
+      navigate('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      navigate('/admin/login');
+    }
   };
 
   const handleUpdateTaskStatus = async (taskId, newStatus) => {
@@ -64,7 +89,7 @@ export default function WorkerDashboard() {
       
       const statusMessages = {
         'in-progress': 'Work started successfully! Task moved to In Progress.',
-        'completed': ' Task completed successfully! Great work!'
+        'completed': 'Task completed successfully! Great work!'
       };
       
       alert(statusMessages[newStatus] || `Task status updated to: ${newStatus}`);
@@ -146,10 +171,10 @@ export default function WorkerDashboard() {
       </div>
 
       <div className="flex h-screen bg-gray-100">
-       
+        {/* Sidebar */}
         <aside className="w-64 bg-gray-800 text-white flex flex-col flex-shrink-0">
           <div className="p-5 px-4 border-b border-gray-700 flex flex-row">
-            <img src={Caffiene} className='h-20 w-20' />
+            <img src={Caffiene} className='h-20 w-20' alt="Logo" />
             <div className='py-4 px-3'>
               <h1 className="text-2xl font-bold text-white">NagarSeva</h1>
               <p className="text-xs text-gray-400 capitalize">{profile?.department_name || 'Department'} Dept.</p>
@@ -194,7 +219,7 @@ export default function WorkerDashboard() {
         </aside>
 
         <main className="flex-grow flex flex-col overflow-y-auto">
-       
+          {/* Header */}
           <header className="bg-white shadow-sm border-b p-4">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-800 capitalize">
@@ -205,7 +230,7 @@ export default function WorkerDashboard() {
               
               <button
                 onClick={() => {
-                  console.log(' Manual refresh triggered');
+                  console.log('Manual refresh triggered');
                   loadWorkerData();
                 }}
                 className="bg-orange-400 hover:bg-orange-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-2"
@@ -297,7 +322,7 @@ export default function WorkerDashboard() {
                             </div>
                             
                             <p className="text-xs text-gray-500 mb-3">
-                               {new Date(task.created_at).toLocaleDateString()} |  Assigned by: {task.assigned_by_name}
+                              {new Date(task.created_at).toLocaleDateString()} | Assigned by: {task.assigned_by_name}
                             </p>
                             
                             {task.complaints && (
@@ -336,7 +361,7 @@ export default function WorkerDashboard() {
                             
                             {task.status === 'completed' && (
                               <span className="px-3 py-1 text-xs bg-green-100 text-green-800 rounded-full">
-                                 Completed
+                                Completed
                               </span>
                             )}
                           </div>
@@ -346,7 +371,6 @@ export default function WorkerDashboard() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    {/* <div className="text-gray-400 text-4xl mb-4"></div> */}
                     <p className="text-gray-600">No {activeTab.replace('-', ' ')} tasks found</p>
                   </div>
                 )}

@@ -71,7 +71,7 @@ function Navbar() {
                                 </div>
                                 :
                                 <div className="space-x-4">
-                                <Link to="/admin"  className="relative overflow-hidden  bg-black text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+                                <Link to="/admin/login"  className="relative overflow-hidden  bg-black text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:shadow-xl hover:scale-105 group">
                                     <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-300 "></div>
                                     <span className="relative z-10">Official login</span>
                                 </Link>

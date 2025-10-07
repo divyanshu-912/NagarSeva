@@ -1,5 +1,5 @@
 
-import { supabase } from '../lib/supabase.js'
+import { supabase } from '../utils/supabaseClient'
 
 
 const DEPARTMENT_MAP = {

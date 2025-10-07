@@ -1,6 +1,7 @@
 import React from "react";
 import Section from "../../components/user/Section.jsx";
-import Button from "../../components/user/Button.jsx"
+import Button from "../../components/user/Button.jsx";
+
 
 import CaffieneLogo from '../../assets/Caffiene.png'
 import { Megaphone, AlertTriangle, SearchCheck } from "lucide-react";
